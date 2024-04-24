@@ -17,15 +17,15 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPost]
-        public void Create(OwnerModel owner)
+        public async Task Create(OwnerModel owner)
         {
-            _context.Create(owner);
+            await _context.Create(owner);
         }
 
         [HttpGet]
-        public List<OwnerModel> Get()
+        public async Task<List<OwnerModel>> Get()
         {
-            return _context.GetAll();
+            return await _context.GetAll();
         }
     }
 }

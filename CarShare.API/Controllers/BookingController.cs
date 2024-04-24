@@ -1,4 +1,5 @@
-﻿using CarShare.Repository.Interfaces;
+﻿using CarShare.Repository.DTOs;
+using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +18,15 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPost]
-        public void Create(BookingModel booking)
+        public async Task Create(BookingDTO booking)
         {
-            _context.Create(booking);
+            await _context.Create(booking);
         }
 
         [HttpGet]
-        public List<BookingModel> Get()
+        public async Task<List<BookingModel>> Get()
         {
-            return _context.GetAll();
+            return await _context.GetAll();
         }
     }
 }

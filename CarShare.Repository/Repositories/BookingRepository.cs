@@ -1,4 +1,5 @@
-﻿using CarShare.Repository.Interfaces;
+﻿using CarShare.Repository.DTOs;
+using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,24 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public BookingModel Create(BookingModel booking)
+        public Task<BookingModel> Create(BookingDTO booking)
         {
             // context is our Database!!
-            _context.Bookings.Add(booking);
+            BookingModel model = new()
+            {
+                StartDate = booking.StartDate,
+                EndDate = booking.EndDate,
+                Person = _context.Persons.FirstOrDefault(p => p.ID == booking.PersonID),
+                Car = _context.Cars.FirstOrDefault(c => c.ID == booking.CarID)
+            };
+            _context.Bookings.Add(model);
             _context.SaveChanges();
-            return booking;
+            return Task.Run(() => model);
         }
 
-        public List<BookingModel> GetAll()
+        public Task<List<BookingModel>> GetAll()
         {
-            return _context.Bookings.ToList();
+            return Task.Run(() => _context.Bookings.ToList());
         }
     }
 }

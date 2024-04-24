@@ -19,7 +19,7 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public PersonModel Create(PersonDTO person)
+        public Task<PersonModel> Create(PersonDTO person)
         {
             // context is our Database!!
             PersonModel model = new()
@@ -30,12 +30,12 @@ namespace CarShare.Repository.Repositories
             };
             _context.Persons.Add(model);
             _context.SaveChanges();
-            return model;
+            return Task.Run(() => model);
         }
 
-        public List<PersonModel> GetAll()
+        public Task<List<PersonModel>> GetAll()
         {
-            return _context.Persons.ToList();
+            return Task.Run(() => _context.Persons.ToList());
             //return _context.Persons.Include(o => o.User).ToList();
         }
     }

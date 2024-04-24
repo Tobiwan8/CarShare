@@ -13,7 +13,7 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public UserModel Create(UserDTO user)
+        public Task<UserModel>Create(UserDTO user)
         {
             // context is our Database!!
             UserModel model = new()
@@ -23,12 +23,17 @@ namespace CarShare.Repository.Repositories
             };
             _context.Users.Add(model);
             _context.SaveChanges();
-            return model;
+            return Task.Run(() => model);
         }
 
-        public List<UserModel> GetAll()
+        public Task<List<UserModel>> GetAll()
         {
-            return _context.Users.ToList();
+            return Task.Run(() => _context.Users.ToList());
+        }
+
+        public Task<UserModel> Update(UserDTO user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

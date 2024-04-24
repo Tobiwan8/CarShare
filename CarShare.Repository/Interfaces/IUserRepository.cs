@@ -10,7 +10,8 @@ namespace CarShare.Repository.Interfaces
 {
     public interface IUserRepository
     {
-        UserModel Create(UserDTO user);
-        List<UserModel> GetAll();
+        Task<UserModel> Create(UserDTO user);
+        Task<List<UserModel>> GetAll();
+        Task<UserModel> Update(UserDTO user);
     }
 }

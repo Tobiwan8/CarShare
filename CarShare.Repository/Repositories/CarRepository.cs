@@ -18,23 +18,34 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public CarModel Create(CarDTO car)
+        public Task<CarModel> Create(CarDTO car)
         {
-            // context is our Database!!
+            OwnerModel? owner = _context.Owners.FirstOrDefault(o => o.Person!.ID == car.OwnerID);
+
+            if(owner == null)
+            {
+                owner = new OwnerModel
+                {
+                    Person = _context.Persons.FirstOrDefault(p => p.ID == car.OwnerID)
+                };
+                _context.Owners.Add(owner);
+                _context.SaveChanges();
+            }
+            
             CarModel model = new()
             {
                 Name = car.Name,
                 LicensePlate = car.LicensePlate,
-                Owner = _context.Owners.FirstOrDefault(o => o.ID == car.OwnerID)
+                Owner = owner
             };
             _context.Cars.Add(model);
             _context.SaveChanges();
-            return model;
+            return Task.Run(() => model);
         }
 
-        public List<CarModel> GetAll()
+        public Task<List<CarModel>> GetAll()
         {
-            return _context.Cars.ToList();
+            return Task.Run(() => _context.Cars.ToList());
         }
     }
 }

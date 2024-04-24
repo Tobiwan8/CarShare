@@ -10,7 +10,7 @@ namespace CarShare.Repository.Interfaces
 {
     public interface ICarRepository
     {
-        CarModel Create(CarDTO car);
-        List<CarModel> GetAll();
+        Task<CarModel> Create(CarDTO car);
+        Task<List<CarModel>> GetAll();
     }
 }

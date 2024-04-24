@@ -10,7 +10,7 @@ namespace CarShare.Repository.Interfaces
 {
     public interface IPersonRepository
     {
-        PersonModel Create(PersonDTO person);
-        List<PersonModel> GetAll();
+        Task<PersonModel> Create(PersonDTO person);
+        Task<List<PersonModel>> GetAll();
     }
 }

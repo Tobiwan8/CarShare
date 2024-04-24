@@ -1,4 +1,5 @@
-﻿using CarShare.Repository.Models;
+﻿using CarShare.Repository.DTOs;
+using CarShare.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CarShare.Repository.Interfaces
 {
     public interface IBookingRepository
     {
-        BookingModel Create(BookingModel booking);
-        List<BookingModel> GetAll();
+        Task<BookingModel> Create(BookingDTO booking);
+        Task<List<BookingModel>> GetAll();
     }
 }

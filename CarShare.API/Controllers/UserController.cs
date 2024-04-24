@@ -2,6 +2,8 @@
 using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace CarShare.API.Controllers
 {
@@ -10,37 +12,53 @@ namespace CarShare.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _context;
+        //private readonly IGenericRepository<UserModel> _genericContext;
 
         public UserController(IUserRepository repo)
         {
             _context = repo;
         }
 
+        //public UserController(IGenericRepository<UserModel> repo)
+        //{
+        //    _genericContext = repo;
+        //}
+
+        //[HttpPost("Generic")]
+        //public async Task<ActionResult<T>> Create<T>(UserModel user)
+        //{
+        //    try
+        //    {
+        //        var createdUser = await _genericContext.CreateAsync(user);
+        //        return CreatedAtAction("GetUserByID", new { id = createdUser.ID }, createdUser);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         // GET: api/<UserController>
         [HttpGet]
-        public List<UserModel> Get()
+        public async Task<List<UserModel>> Get()
         {
-            var result = _context.GetAll();
+            var result = await _context.GetAll();
             return result;
         }
 
         // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<UserModel>> Get(int id)
+        //{
+
+        //    return "value";
+        //}
 
         // POST api/<UserController>
         [HttpPost]
-        public void Create(UserDTO user)
+        public async Task Create(UserDTO user)
         {
-            //UserModel userModel = new();
-            //userModel.UserName = user.UserName;
-            //userModel.Password = user.Password;
-
-            _context.Create(user);
+            await _context.Create(user);
         }
 
         //// PUT api/<UserController>/5

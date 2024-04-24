@@ -18,15 +18,15 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPost]
-        public void Create(PersonDTO person)
+        public async Task Create(PersonDTO person)
         {
-            _context.Create(person);
+            await _context.Create(person);
         }
 
         [HttpGet]
-        public List<PersonModel> Get()
+        public async Task <List<PersonModel>> Get()
         {
-            return _context.GetAll();
+            return await _context.GetAll();
         }
     }
 }

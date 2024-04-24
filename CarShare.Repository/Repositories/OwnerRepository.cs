@@ -17,17 +17,17 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public OwnerModel Create(OwnerModel owner)
+        public Task<OwnerModel> Create(OwnerModel owner)
         {
             // context is our Database!!
             _context.Owners.Add(owner);
             _context.SaveChanges();
-            return owner;
+            return Task.Run(() => owner);
         }
 
-        public List<OwnerModel> GetAll()
+        public Task<List<OwnerModel>> GetAll()
         {
-            return _context.Owners.ToList();
+            return Task.Run(() => _context.Owners.ToList());
         }
     }
 }
