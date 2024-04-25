@@ -19,7 +19,7 @@ namespace CarShare.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,7 +34,7 @@ namespace CarShare.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserID = table.Column<int>(type: "int", nullable: true)
+                    UserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,25 +43,27 @@ namespace CarShare.API.Migrations
                         name: "FK_Persons_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Owners",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PersonID = table.Column<int>(type: "int", nullable: true)
+                    PersonID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Owners", x => x.Id);
+                    table.PrimaryKey("PK_Owners", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Owners_Persons_PersonID",
                         column: x => x.PersonID,
                         principalTable: "Persons",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,17 +73,18 @@ namespace CarShare.API.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LicensePlate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<int>(type: "int", nullable: true)
+                    LicensePlate = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    OwnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cars", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Cars_Owners_OwnerId",
-                        column: x => x.OwnerId,
+                        name: "FK_Cars_Owners_OwnerID",
+                        column: x => x.OwnerID,
                         principalTable: "Owners",
-                        principalColumn: "Id");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,8 +95,8 @@ namespace CarShare.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PersonID = table.Column<int>(type: "int", nullable: true),
-                    CarID = table.Column<int>(type: "int", nullable: true)
+                    PersonID = table.Column<int>(type: "int", nullable: false),
+                    CarID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -102,12 +105,14 @@ namespace CarShare.API.Migrations
                         name: "FK_Bookings_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookings_Persons_PersonID",
                         column: x => x.PersonID,
                         principalTable: "Persons",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,19 +155,28 @@ namespace CarShare.API.Migrations
                 column: "PersonCarsID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_OwnerId",
+                name: "IX_Cars_LicensePlate",
                 table: "Cars",
-                column: "OwnerId");
+                column: "LicensePlate",
+                unique: true,
+                filter: "[LicensePlate] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cars_OwnerID",
+                table: "Cars",
+                column: "OwnerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Owners_PersonID",
                 table: "Owners",
-                column: "PersonID");
+                column: "PersonID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Persons_UserID",
                 table: "Persons",
-                column: "UserID");
+                column: "UserID",
+                unique: true);
         }
 
         /// <inheritdoc />
