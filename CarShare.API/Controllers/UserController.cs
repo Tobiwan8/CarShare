@@ -61,6 +61,19 @@ namespace CarShare.API.Controllers
             await _context.Create(user);
         }
 
+        [HttpPut]
+        public async Task Update(UserModel user)
+        {
+            await _context.Update(user);
+        }
+
+        [HttpDelete]
+        public async Task Delete(int userID) 
+        {
+            await _context.Delete(userID); 
+        }
+
+
         //// PUT api/<UserController>/5
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody] string value)

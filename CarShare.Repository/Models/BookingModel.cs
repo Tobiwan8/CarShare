@@ -11,6 +11,8 @@ namespace CarShare.Repository.Models
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int PersonID { get; set; }
+        public int CarID { get; set; }
         public PersonModel? Person { get; set; }
         public CarModel? Car { get; set; }
     }

@@ -4,6 +4,7 @@ using CarShare.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShare.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240425111444_InitSix")]
+    partial class InitSix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,13 +48,13 @@ namespace CarShare.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CarID")
+                    b.Property<int?>("CarID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PersonID")
+                    b.Property<int?>("PersonID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -80,7 +83,7 @@ namespace CarShare.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerID")
+                    b.Property<int?>("OwnerID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -102,13 +105,12 @@ namespace CarShare.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("PersonID")
+                    b.Property<int?>("PersonID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PersonID")
-                        .IsUnique();
+                    b.HasIndex("PersonID");
 
                     b.ToTable("Owners");
                 });
@@ -179,15 +181,11 @@ namespace CarShare.API.Migrations
                 {
                     b.HasOne("CarShare.Repository.Models.CarModel", "Car")
                         .WithMany()
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarID");
 
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PersonID");
 
                     b.Navigation("Car");
 
@@ -198,9 +196,7 @@ namespace CarShare.API.Migrations
                 {
                     b.HasOne("CarShare.Repository.Models.OwnerModel", "Owner")
                         .WithMany("Car")
-                        .HasForeignKey("OwnerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OwnerID");
 
                     b.Navigation("Owner");
                 });
@@ -208,10 +204,8 @@ namespace CarShare.API.Migrations
             modelBuilder.Entity("CarShare.Repository.Models.OwnerModel", b =>
                 {
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
-                        .WithOne()
-                        .HasForeignKey("CarShare.Repository.Models.OwnerModel", "PersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("PersonID");
 
                     b.Navigation("Person");
                 });

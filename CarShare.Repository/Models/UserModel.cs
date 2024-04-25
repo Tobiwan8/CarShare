@@ -9,5 +9,7 @@ namespace CarShare.Repository.Models
         [PasswordPropertyText]
         public string? Password { get; set; }
         public string? Role { get; set; } = "User";
+
+
     }
 }

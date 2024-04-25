@@ -4,6 +4,7 @@ using CarShare.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShare.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240425133424_InitFifteen")]
+    partial class InitFifteen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,8 +110,7 @@ namespace CarShare.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PersonID")
-                        .IsUnique();
+                    b.HasIndex("PersonID");
 
                     b.ToTable("Owners");
                 });
@@ -208,8 +210,8 @@ namespace CarShare.API.Migrations
             modelBuilder.Entity("CarShare.Repository.Models.OwnerModel", b =>
                 {
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
-                        .WithOne()
-                        .HasForeignKey("CarShare.Repository.Models.OwnerModel", "PersonID")
+                        .WithMany()
+                        .HasForeignKey("PersonID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

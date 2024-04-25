@@ -13,6 +13,7 @@ namespace CarShare.Repository.Models
         public int ID { get; set; }
         public string? Name { get; set; }
         public string? LicensePlate { get; set; }
+        public int OwnerID { get; set; }
         public OwnerModel? Owner { get; set; }
         public List<PersonModel>? CarPersons { get; set;}
     }
