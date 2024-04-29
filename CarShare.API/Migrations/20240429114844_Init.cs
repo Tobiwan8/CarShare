@@ -91,7 +91,7 @@ namespace CarShare.API.Migrations
                 name: "Bookings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -100,13 +100,13 @@ namespace CarShare.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.PrimaryKey("PK_Bookings", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Bookings_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bookings_Persons_PersonID",
                         column: x => x.PersonID,
@@ -116,24 +116,26 @@ namespace CarShare.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CarModelPersonModel",
+                name: "PersonCars",
                 columns: table => new
                 {
-                    CarPersonsID = table.Column<int>(type: "int", nullable: false),
-                    PersonCarsID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonID = table.Column<int>(type: "int", nullable: false),
+                    CarID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarModelPersonModel", x => new { x.CarPersonsID, x.PersonCarsID });
+                    table.PrimaryKey("PK_PersonCars", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_CarModelPersonModel_Cars_PersonCarsID",
-                        column: x => x.PersonCarsID,
+                        name: "FK_PersonCars_Cars_CarID",
+                        column: x => x.CarID,
                         principalTable: "Cars",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CarModelPersonModel_Persons_CarPersonsID",
-                        column: x => x.CarPersonsID,
+                        name: "FK_PersonCars_Persons_PersonID",
+                        column: x => x.PersonID,
                         principalTable: "Persons",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -142,17 +144,13 @@ namespace CarShare.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CarID",
                 table: "Bookings",
-                column: "CarID");
+                column: "CarID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_PersonID",
                 table: "Bookings",
                 column: "PersonID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CarModelPersonModel_PersonCarsID",
-                table: "CarModelPersonModel",
-                column: "PersonCarsID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_LicensePlate",
@@ -169,14 +167,22 @@ namespace CarShare.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Owners_PersonID",
                 table: "Owners",
-                column: "PersonID",
-                unique: true);
+                column: "PersonID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonCars_CarID",
+                table: "PersonCars",
+                column: "CarID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonCars_PersonID",
+                table: "PersonCars",
+                column: "PersonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Persons_UserID",
                 table: "Persons",
-                column: "UserID",
-                unique: true);
+                column: "UserID");
         }
 
         /// <inheritdoc />
@@ -186,7 +192,7 @@ namespace CarShare.API.Migrations
                 name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "CarModelPersonModel");
+                name: "PersonCars");
 
             migrationBuilder.DropTable(
                 name: "Cars");

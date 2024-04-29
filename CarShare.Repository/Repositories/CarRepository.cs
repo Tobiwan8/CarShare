@@ -1,6 +1,7 @@
 ﻿using CarShare.Repository.DTOs;
 using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,16 @@ namespace CarShare.Repository.Repositories
 
         public Task<CarModel> Create(CarDTO car)
         {
-            OwnerModel? owner = _context.Owners.FirstOrDefault(o => o.Person!.ID == car.OwnerID);
+            OwnerModel? owner = _context.Owners.FirstOrDefault(o => o.PersonID == car.PersonID);
 
             if(owner == null)
             {
+                PersonModel? person = new();
+                person = _context.Persons.FirstOrDefault(p => p.ID == car.PersonID);
                 owner = new OwnerModel
                 {
-                    Person = _context.Persons.FirstOrDefault(p => p.ID == car.OwnerID)
+                    Person = person,
+                    PersonID = person!.ID
                 };
                 _context.Owners.Add(owner);
                 _context.SaveChanges();
@@ -36,7 +40,7 @@ namespace CarShare.Repository.Repositories
             {
                 Name = car.Name,
                 LicensePlate = car.LicensePlate,
-                Owner = owner
+                OwnerID = owner.ID
             };
             _context.Cars.Add(model);
             _context.SaveChanges();

@@ -9,7 +9,7 @@ namespace CarShare.Repository.Interfaces
 {
     public interface IOwnerRepository
     {
-        Task<OwnerModel> Create(OwnerModel owner);
+        Task<OwnerModel> Create(int ownerID);
         Task<List<OwnerModel>> GetAll();
     }
 }

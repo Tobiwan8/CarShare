@@ -33,10 +33,43 @@ namespace CarShare.Repository.Repositories
             return Task.Run(() => model);
         }
 
+        public async Task<PersonModel?> Delete(int personID)
+        {
+            PersonModel? dbPerson = await _context.Persons.FindAsync(personID);
+
+            if (dbPerson == null)
+            {
+                return dbPerson;
+            }
+
+            _context.Persons.Remove(dbPerson);
+
+            await _context.SaveChangesAsync();
+
+            return dbPerson;
+        }
+
         public Task<List<PersonModel>> GetAll()
         {
             return Task.Run(() => _context.Persons.ToList());
             //return _context.Persons.Include(o => o.User).ToList();
+        }
+
+        public async Task<PersonModel?> Update(PersonDTO person)
+        {
+            PersonModel? dbPerson = await _context.Persons.FindAsync(person.UserID);
+
+            if (dbPerson == null)
+            {
+                return dbPerson;
+            }
+
+            dbPerson.FirstName = person.FirstName;
+            dbPerson.LastName = person.LastName;
+
+            await _context.SaveChangesAsync();
+
+            return dbPerson;
         }
     }
 }

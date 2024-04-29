@@ -44,6 +44,7 @@ namespace CarShare.Repository.Repositories
 
             dbUser.UserName = user.UserName;
             dbUser.Password = user.Password;
+            dbUser.Role = user.Role;
 
             await _context.SaveChangesAsync();
 

@@ -8,7 +8,7 @@ namespace CarShare.Repository.Models
 {
     public class BookingModel
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int PersonID { get; set; }

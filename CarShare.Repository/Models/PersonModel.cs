@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace CarShare.Repository.Models
 {
-    [Index(nameof(UserID), IsUnique = true)]
     public class PersonModel
     {
         public int ID { get; set; }
@@ -16,6 +15,6 @@ namespace CarShare.Repository.Models
         public string? LastName { get; set; }
         public int UserID { get; set; }
         public UserModel? User { get; set; }
-        public List<CarModel>? PersonCars { get; set; }
+        public List<PersonCarModel>? PersonCars { get; set; }
     }
 }

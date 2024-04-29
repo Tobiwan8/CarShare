@@ -17,9 +17,9 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public Task<OwnerModel> Create(OwnerModel owner)
+        public Task<OwnerModel> Create(int ownerID)
         {
-            // context is our Database!!
+            OwnerModel owner = new() { PersonID = ownerID};
             _context.Owners.Add(owner);
             _context.SaveChanges();
             return Task.Run(() => owner);

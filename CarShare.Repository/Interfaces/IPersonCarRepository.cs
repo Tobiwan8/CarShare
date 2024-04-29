@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace CarShare.Repository.Interfaces
 {
-    public interface IPersonRepository
+    public interface IPersonCarRepository
     {
-        Task<PersonModel> Create(PersonDTO person);
-        Task<List<PersonModel>> GetAll();
-        Task<PersonModel?> Update(PersonDTO person);
-        Task<PersonModel?> Delete(int personID);
+        Task<PersonCarModel> Create(PersonCarDTO pcDTO);
+        Task<List<PersonCarModel>> GetAll();
+        Task<PersonCarModel> Delete(PersonCarDTO pcDTO);
     }
 }

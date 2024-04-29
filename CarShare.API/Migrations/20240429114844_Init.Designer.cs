@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShare.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240425134615_Init")]
+    [Migration("20240429114844_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,28 +25,13 @@ namespace CarShare.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CarModelPersonModel", b =>
-                {
-                    b.Property<int>("CarPersonsID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonCarsID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CarPersonsID", "PersonCarsID");
-
-                    b.HasIndex("PersonCarsID");
-
-                    b.ToTable("CarModelPersonModel");
-                });
-
             modelBuilder.Entity("CarShare.Repository.Models.BookingModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<int>("CarID")
                         .HasColumnType("int");
@@ -60,9 +45,10 @@ namespace CarShare.API.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
-                    b.HasIndex("CarID");
+                    b.HasIndex("CarID")
+                        .IsUnique();
 
                     b.HasIndex("PersonID");
 
@@ -110,10 +96,32 @@ namespace CarShare.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PersonID")
-                        .IsUnique();
+                    b.HasIndex("PersonID");
 
                     b.ToTable("Owners");
+                });
+
+            modelBuilder.Entity("CarShare.Repository.Models.PersonCarModel", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("CarID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CarID");
+
+                    b.HasIndex("PersonID");
+
+                    b.ToTable("PersonCars");
                 });
 
             modelBuilder.Entity("CarShare.Repository.Models.PersonModel", b =>
@@ -135,8 +143,7 @@ namespace CarShare.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserID")
-                        .IsUnique();
+                    b.HasIndex("UserID");
 
                     b.ToTable("Persons");
                 });
@@ -163,27 +170,12 @@ namespace CarShare.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CarModelPersonModel", b =>
-                {
-                    b.HasOne("CarShare.Repository.Models.PersonModel", null)
-                        .WithMany()
-                        .HasForeignKey("CarPersonsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarShare.Repository.Models.CarModel", null)
-                        .WithMany()
-                        .HasForeignKey("PersonCarsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CarShare.Repository.Models.BookingModel", b =>
                 {
                     b.HasOne("CarShare.Repository.Models.CarModel", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("CarShare.Repository.Models.BookingModel", "CarID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
@@ -200,7 +192,7 @@ namespace CarShare.API.Migrations
             modelBuilder.Entity("CarShare.Repository.Models.CarModel", b =>
                 {
                     b.HasOne("CarShare.Repository.Models.OwnerModel", "Owner")
-                        .WithMany("Car")
+                        .WithMany("Cars")
                         .HasForeignKey("OwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -211,10 +203,29 @@ namespace CarShare.API.Migrations
             modelBuilder.Entity("CarShare.Repository.Models.OwnerModel", b =>
                 {
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
-                        .WithOne()
-                        .HasForeignKey("CarShare.Repository.Models.OwnerModel", "PersonID")
+                        .WithMany()
+                        .HasForeignKey("PersonID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("CarShare.Repository.Models.PersonCarModel", b =>
+                {
+                    b.HasOne("CarShare.Repository.Models.CarModel", "Car")
+                        .WithMany("CarPersons")
+                        .HasForeignKey("CarID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
+                        .WithMany("PersonCars")
+                        .HasForeignKey("PersonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
 
                     b.Navigation("Person");
                 });
@@ -222,17 +233,27 @@ namespace CarShare.API.Migrations
             modelBuilder.Entity("CarShare.Repository.Models.PersonModel", b =>
                 {
                     b.HasOne("CarShare.Repository.Models.UserModel", "User")
-                        .WithOne()
-                        .HasForeignKey("CarShare.Repository.Models.PersonModel", "UserID")
+                        .WithMany()
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CarShare.Repository.Models.CarModel", b =>
+                {
+                    b.Navigation("CarPersons");
+                });
+
             modelBuilder.Entity("CarShare.Repository.Models.OwnerModel", b =>
                 {
-                    b.Navigation("Car");
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("CarShare.Repository.Models.PersonModel", b =>
+                {
+                    b.Navigation("PersonCars");
                 });
 #pragma warning restore 612, 618
         }

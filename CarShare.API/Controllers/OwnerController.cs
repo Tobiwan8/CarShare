@@ -17,9 +17,9 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPost]
-        public async Task Create(OwnerModel owner)
+        public async Task Create(int personID)
         {
-            await _context.Create(owner);
+            await _context.Create(personID);
         }
 
         [HttpGet]
