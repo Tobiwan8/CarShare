@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-string connectionString = @"Data Source=LAPTOP-5N8MMS0O\SQLEXPRESS;Initial Catalog = CarShare;Integrated Security=True;Encrypt=False;Trust Server Certificate=True;";
+string connectionString = @"Data Source=.;Initial Catalog = CarShare;Integrated Security=True;Encrypt=False;Trust Server Certificate=True;";
+//string connectionString = @"Data Source=LAPTOP-5N8MMS0O\SQLEXPRESS;Initial Catalog = CarShare;Integrated Security=True;Encrypt=False;Trust Server Certificate=True;";
 //string connectionString = @"Data Source=.;Initial Catalog = CarShare; Integrated Security=True;Encrypt=False;Trust Server Certificate=True;";
 builder.Services.AddDbContext<DatabaseContext>(o => o.UseSqlServer(connectionString, b => b.MigrationsAssembly("CarShare.API")));
 

@@ -4,6 +4,7 @@ using CarShare.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,6 +37,39 @@ namespace CarShare.Repository.Repositories
         public Task<List<BookingModel>> GetAll()
         {
             return Task.Run(() => _context.Bookings.ToList());
+        }
+
+        public async Task<BookingModel?> Update(BookingUpdateDTO booking)
+        {
+            BookingModel? dbBooking = await _context.Bookings.FindAsync(booking.ID);
+
+            if (dbBooking == null)
+            {
+                return dbBooking;
+            }
+
+            dbBooking.StartDate = booking.StartDate;
+            dbBooking.EndDate = booking.EndDate;
+
+            await _context.SaveChangesAsync();
+
+            return dbBooking;
+        }
+
+        public async Task<BookingModel?> Delete(int bookingID)
+        {
+            BookingModel? dbBooking = await _context.Bookings.FindAsync(bookingID);
+
+            if (dbBooking == null)
+            {
+                return dbBooking;
+            }
+
+            _context.Bookings.Remove(dbBooking);
+
+            await _context.SaveChangesAsync();
+
+            return dbBooking;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CarShare.Repository.DTOs;
 using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,14 +31,35 @@ namespace CarShare.Repository.Repositories
             return Task.Run(() => model);
         }
 
-        public Task<PersonCarModel> Delete(PersonCarDTO pcDTO)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<List<PersonCarModel>> GetAll()
         {
             return Task.Run(() => _context.PersonCars.ToList());
+        }
+
+        public async Task<List<PersonCarModel>> GetAllByPersonID(int personID)
+        {
+            return await _context.PersonCars.Where(b => b.PersonID == personID).ToListAsync();
+        }
+
+        public async Task<List<PersonCarModel>> GetAllByCarID(int carID)
+        {
+            return await _context.PersonCars.Where(b => b.CarID == carID).ToListAsync();
+        }
+
+        public async Task<PersonCarModel?> Delete(PersonCarDTO pcDTO)
+        {
+            PersonCarModel? personCarToDelete = await _context.PersonCars.FirstOrDefaultAsync(b => b.CarID == pcDTO.CarID && b.PersonID == pcDTO.PersonID);
+
+            if(personCarToDelete == null) 
+            {
+                return personCarToDelete;
+            }
+
+            _context.PersonCars.Remove(personCarToDelete);
+
+            await _context.SaveChangesAsync();
+
+            return personCarToDelete;
         }
     }
 }

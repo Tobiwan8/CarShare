@@ -30,7 +30,7 @@ namespace CarShare.Repository.Models
                 .HasOne(p => p.Car)
                 .WithMany(p => p.CarPersons)
                 .HasForeignKey(p => p.CarID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             //modelBuilder.Entity<OwnerModel>()
             //    .HasOne(o => o.Person)
@@ -56,7 +56,7 @@ namespace CarShare.Repository.Models
             modelBuilder.Entity<BookingModel>()
                 .HasOne(b => b.Car)
                 .WithOne()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             //base.OnModelCreating(modelBuilder);
         }

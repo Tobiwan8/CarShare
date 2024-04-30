@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShare.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240429114844_Init")]
+    [Migration("20240430071955_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -175,7 +175,6 @@ namespace CarShare.API.Migrations
                     b.HasOne("CarShare.Repository.Models.CarModel", "Car")
                         .WithOne()
                         .HasForeignKey("CarShare.Repository.Models.BookingModel", "CarID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
@@ -216,7 +215,6 @@ namespace CarShare.API.Migrations
                     b.HasOne("CarShare.Repository.Models.CarModel", "Car")
                         .WithMany("CarPersons")
                         .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")

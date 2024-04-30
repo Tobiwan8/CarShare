@@ -30,15 +30,15 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPut]
-        public async Task Update(PersonDTO person)
+        public async Task Update(PersonUpdateDTO person)
         {
             await _context.Update(person);
         }
 
         [HttpDelete]
-        public async Task Delete(int userID)
+        public async Task Delete(int personID)
         {
-            await _context.Delete(userID);
+            await _context.Delete(personID);
         }
     }
 }

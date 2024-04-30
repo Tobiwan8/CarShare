@@ -105,8 +105,7 @@ namespace CarShare.API.Migrations
                         name: "FK_Bookings_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Bookings_Persons_PersonID",
                         column: x => x.PersonID,
@@ -131,8 +130,7 @@ namespace CarShare.API.Migrations
                         name: "FK_PersonCars_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_PersonCars_Persons_PersonID",
                         column: x => x.PersonID,

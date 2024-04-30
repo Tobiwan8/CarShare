@@ -51,5 +51,49 @@ namespace CarShare.Repository.Repositories
         {
             return Task.Run(() => _context.Cars.ToList());
         }
+
+        public async Task<CarModel?> Update(CarUpdateDTO car)
+        {
+            CarModel? dbCar = await _context.Cars.FindAsync(car.ID);
+
+            if (dbCar == null)
+            {
+                return dbCar;
+            }
+
+            dbCar.Name= car.Name;
+            dbCar.LicensePlate = car.LicensePlate;
+
+            await _context.SaveChangesAsync();
+
+            return dbCar;
+        }
+        
+        public async Task<CarModel?> Delete(int carID)
+        {
+            CarModel? dbCar= await _context.Cars.FindAsync(carID);
+
+            if (dbCar == null)
+            {
+                return dbCar;
+            }
+
+            // Find all bookings and personcars associated with the car
+            var bookings = await _context.Bookings.Where(b => b.CarID == carID).ToListAsync();
+            var personCars = await _context.PersonCars.Where(b => b.CarID == carID).ToListAsync();
+
+            // Delete each booking and personcar with associated carID
+            _context.Bookings.RemoveRange(bookings);
+            _context.PersonCars.RemoveRange(personCars);
+
+            // Save changes on Database before deleting the car to prevent FK constraints
+            await _context.SaveChangesAsync();
+
+            _context.Cars.Remove(dbCar);
+
+            await _context.SaveChangesAsync();
+
+            return dbCar;
+        }
     }
 }

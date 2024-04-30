@@ -28,5 +28,17 @@ namespace CarShare.API.Controllers
         {
             return await _context.GetAll();
         }
+
+        [HttpPut]
+        public async Task Update(CarUpdateDTO car)
+        {
+            await _context.Update(car);
+        }
+
+        [HttpDelete]
+        public async Task Delete(int carID)
+        {
+            await _context.Delete(carID);
+        }
     }
 }

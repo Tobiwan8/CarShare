@@ -172,7 +172,6 @@ namespace CarShare.API.Migrations
                     b.HasOne("CarShare.Repository.Models.CarModel", "Car")
                         .WithOne()
                         .HasForeignKey("CarShare.Repository.Models.BookingModel", "CarID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
@@ -213,7 +212,6 @@ namespace CarShare.API.Migrations
                     b.HasOne("CarShare.Repository.Models.CarModel", "Car")
                         .WithMany("CarPersons")
                         .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CarShare.Repository.Models.PersonModel", "Person")
