@@ -33,6 +33,14 @@ namespace CarShare.Repository.Repositories
             return Task.Run(() => _context.Users.ToList());
         }
 
+        public async Task<UserModel?> GetUser(string username, string password)
+        {
+            return await Task.Run(() =>
+            {
+                return _context.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+            });
+        }
+
         public async Task<UserModel?> Update(UserModel user)
         {
             UserModel? dbUser = await _context.Users.FindAsync(user.ID);
@@ -66,5 +74,6 @@ namespace CarShare.Repository.Repositories
 
             return dbUser;
         }
+
     }
 }

@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace CarShare.Repository.Models
 {
+    [Index(nameof(UserName), IsUnique = true)]
     public class UserModel
     {
         public int ID { get; set; }
@@ -9,7 +11,5 @@ namespace CarShare.Repository.Models
         [PasswordPropertyText]
         public string? Password { get; set; }
         public string? Role { get; set; } = "User";
-
-
     }
 }
