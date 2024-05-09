@@ -62,9 +62,10 @@ namespace CarShare.API.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public async Task Create(UserDTO user)
+        public async Task<UserModel> Create(UserDTO user)
         {
-            await _context.Create(user);
+            UserModel userModel = await _context.Create(user);
+            return userModel;
         }
 
         [HttpPut]

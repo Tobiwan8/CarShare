@@ -15,7 +15,7 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public Task<UserModel>Create(UserDTO user)
+        public async Task<UserModel> Create(UserDTO user)
         {
             // context is our Database!!
             UserModel model = new()
@@ -24,8 +24,8 @@ namespace CarShare.Repository.Repositories
                 Password = user.Password
             };
             _context.Users.Add(model);
-            _context.SaveChanges();
-            return Task.Run(() => model);
+            await _context.SaveChangesAsync();
+            return model;
         }
 
         public Task<List<UserModel>> GetAll()
