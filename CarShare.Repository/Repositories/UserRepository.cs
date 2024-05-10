@@ -41,6 +41,14 @@ namespace CarShare.Repository.Repositories
             });
         }
 
+        public async Task<UserModel?> GetUser(int userID)
+        {
+            return await Task.Run(() =>
+            {
+                return _context.Users.FirstOrDefault(u => u.ID == userID);
+            });
+        }
+
         public async Task<UserModel?> Update(UserModel user)
         {
             UserModel? dbUser = await _context.Users.FindAsync(user.ID);
@@ -74,6 +82,5 @@ namespace CarShare.Repository.Repositories
 
             return dbUser;
         }
-
     }
 }

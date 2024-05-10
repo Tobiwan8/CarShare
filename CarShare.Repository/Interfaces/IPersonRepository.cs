@@ -12,6 +12,7 @@ namespace CarShare.Repository.Interfaces
     {
         Task<PersonModel> Create(PersonDTO person);
         Task<List<PersonModel>> GetAll();
+        Task<PersonModel?> GetByUserID(int userID);
         Task<PersonModel?> Update(PersonUpdateDTO person);
         Task<PersonModel?> Delete(int personID);
     }

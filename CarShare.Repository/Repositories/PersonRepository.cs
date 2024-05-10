@@ -39,6 +39,14 @@ namespace CarShare.Repository.Repositories
             //return _context.Persons.Include(o => o.User).ToList();
         }
 
+        public async Task<PersonModel?> GetByUserID(int userID)
+        {
+            return await Task.Run(() =>
+            {
+                return _context.Persons.FirstOrDefault(u => u.UserID == userID);
+            });
+        }
+
         public async Task<PersonModel?> Update(PersonUpdateDTO person)
         {
             //UserID in this case is actually PersonID when using the API

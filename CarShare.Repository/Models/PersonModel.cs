@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarShare.Repository.Models
 {
+    [Index(nameof(UserID), IsUnique = true)]
     public class PersonModel
     {
         public int ID { get; set; }

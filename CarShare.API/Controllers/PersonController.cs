@@ -29,6 +29,12 @@ namespace CarShare.API.Controllers
             return await _context.GetAll();
         }
 
+        [HttpGet("userid")]
+        public async Task<PersonModel?> GetPerson(int userID)
+        {
+            return await _context.GetByUserID(userID);
+        }
+
         [HttpPut]
         public async Task Update(PersonUpdateDTO person)
         {
