@@ -2,12 +2,17 @@ using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
 using CarShare.Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    });
 
 string connectionString = @"Data Source=.;Initial Catalog = CarShare;Integrated Security=True;Encrypt=False;Trust Server Certificate=True;";
 //string connectionString = @"Data Source=LAPTOP-5N8MMS0O\SQLEXPRESS;Initial Catalog = CarShare;Integrated Security=True;Encrypt=False;Trust Server Certificate=True;";

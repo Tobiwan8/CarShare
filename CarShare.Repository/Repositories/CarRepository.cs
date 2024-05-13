@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -94,6 +95,22 @@ namespace CarShare.Repository.Repositories
             await _context.SaveChangesAsync();
 
             return dbCar;
+        }
+
+        public async Task<List<CarModel>> OwnedGet(int personID)
+        {
+            OwnerModel? owner = _context.Owners.FirstOrDefault(o => o.PersonID == personID);
+            List<CarModel> carsOwnedList = new();
+
+            if(owner is not null)
+            {
+                carsOwnedList = await _context.Cars
+                    .Where(c => c.OwnerID == owner.ID).ToListAsync();
+
+                return carsOwnedList;
+            }
+
+            return [];
         }
     }
 }
