@@ -97,15 +97,23 @@ namespace CarShare.Repository.Repositories
             return dbCar;
         }
 
-        public async Task<List<CarModel>> OwnedGet(int personID)
+        public async Task<List<CarOwnedReturnDTO>> OwnedGet(int personID)
         {
             OwnerModel? owner = _context.Owners.FirstOrDefault(o => o.PersonID == personID);
-            List<CarModel> carsOwnedList = new();
 
             if(owner is not null)
             {
+                List<CarOwnedReturnDTO> carsOwnedList = new();
                 carsOwnedList = await _context.Cars
-                    .Where(c => c.OwnerID == owner.ID).ToListAsync();
+                    .Where(c => c.OwnerID == owner.ID)
+                    .Select(c => new CarOwnedReturnDTO
+                    {
+                        ID = c.ID,
+                        Name = c.Name,
+                        LicensePlate = c.LicensePlate,
+                        OwnerID = c.OwnerID
+                    })
+                    .ToListAsync();
 
                 return carsOwnedList;
             }
