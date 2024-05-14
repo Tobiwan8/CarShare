@@ -58,6 +58,12 @@ namespace CarShare.API.Controllers
             return await _context.GetUser(userID);
         }
 
+        [HttpGet("username")]
+        public async Task<GetPersonByUserNameReturnDTO?> GetUser(string userName)
+        {
+            return await _context.GetUserByUserName(userName);
+        }
+
         // GET api/<UserController>/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<UserModel>> Get(int id)

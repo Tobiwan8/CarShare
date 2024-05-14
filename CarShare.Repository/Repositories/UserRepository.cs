@@ -82,5 +82,31 @@ namespace CarShare.Repository.Repositories
 
             return dbUser;
         }
+
+        public async Task<GetPersonByUserNameReturnDTO?> GetUserByUserName(string userName)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    UserModel? user = new();
+                    user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+                    PersonModel? person = new();
+                    person = _context.Persons.FirstOrDefault(p => p.UserID == user!.ID);
+                    GetPersonByUserNameReturnDTO personDTO = new()
+                    {
+                        ID = person!.ID,
+                        FirstName = person.FirstName,
+                        LastName = person.LastName
+                    };
+
+                    return personDTO;
+                }
+                catch
+                {
+                    return null;
+                }
+            });
+        }
     }
 }

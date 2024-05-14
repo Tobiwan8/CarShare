@@ -16,5 +16,6 @@ namespace CarShare.Repository.Interfaces
         Task<UserModel?> GetUser(int userID);
         Task<UserModel?> Update(UserModel user);
         Task<UserModel?> Delete(int userID);
+        Task<GetPersonByUserNameReturnDTO?> GetUserByUserName(string userName);
     }
 }
