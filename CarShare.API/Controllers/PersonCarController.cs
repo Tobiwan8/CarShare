@@ -17,14 +17,9 @@ namespace CarShare.API.Controllers
             _context = repo;
         }
 
-        [HttpPost("{carId}/{personId}")]
-        public async Task Create(int carID, int personID)
+        [HttpPost]
+        public async Task Create(PersonCarDTO pcDTO)
         {
-            PersonCarDTO pcDTO = new()
-            {
-                PersonID = personID,
-                CarID = carID
-            };
             await _context.Create(pcDTO);
         }
 
