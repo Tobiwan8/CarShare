@@ -36,14 +36,14 @@ namespace CarShare.Repository.Repositories
             return Task.Run(() => _context.PersonCars.ToList());
         }
 
-        public async Task<List<PersonCarModel>> GetAllByPersonID(int personID)
+        public async Task<List<CarModel>> GetAllByPersonID(int personID)
         {
-            return await _context.PersonCars.Where(b => b.PersonID == personID).ToListAsync();
+            return await _context.PersonCars.Where(b => b.PersonID == personID).Select(b => b.Car!).ToListAsync();
         }
 
-        public async Task<List<PersonCarModel>> GetAllByCarID(int carID)
+        public async Task<List<PersonModel>> GetAllByCarID(int carID)
         {
-            return await _context.PersonCars.Where(b => b.CarID == carID).ToListAsync();
+            return await _context.PersonCars.Where(b => b.CarID == carID).Select(b => b.Person!).ToListAsync();
         }
 
         public async Task<PersonCarModel?> Delete(PersonCarDTO pcDTO)

@@ -30,13 +30,13 @@ namespace CarShare.API.Controllers
         }
 
         [HttpGet("byPersonID/{personID}")]
-        public async Task<List<PersonCarModel>> GetAllByPersonID(int personID)
+        public async Task<List<CarModel>> GetAllByPersonID(int personID)
         {
             return await _context.GetAllByPersonID(personID);
         }
 
         [HttpGet("byCarID/{carID}")]
-        public async Task<List<PersonCarModel>> GetAllByCarID(int carID)
+        public async Task<List<PersonModel>> GetAllByCarID(int carID)
         {
             return await _context.GetAllByCarID(carID);
         }
