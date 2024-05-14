@@ -81,7 +81,7 @@ namespace CarShare.API.Controllers
         }
 
         [HttpDelete]
-        public async Task Delete(int userID) 
+        public async Task Delete([FromQuery]int userID)
         {
             await _context.Delete(userID); 
         }
