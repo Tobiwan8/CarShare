@@ -41,9 +41,10 @@ namespace CarShare.API.Controllers
             return await _context.GetAllByCarID(carID);
         }
 
-        [HttpDelete]
-        public async Task Delete(PersonCarDTO pcDTO)
+        [HttpDelete("{carId}/{personId}")]
+        public async Task Delete(int carID, int personID)
         {
+            var pcDTO = new PersonCarDTO { CarID = carID, PersonID = personID };
             await _context.Delete(pcDTO);
         }
     }
