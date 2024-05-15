@@ -29,6 +29,12 @@ namespace CarShare.API.Controllers
             return await _context.GetAll();
         }
 
+        [HttpGet("carID")]
+        public async Task<List<BookingPersonLidtReturnDTO?>> GetCarBookings(int carID)
+        {
+            return await _context.GetBookingsForSharedCars(carID);
+        }
+
         [HttpPut]
         public async Task Update(BookingUpdateDTO booking)
         {

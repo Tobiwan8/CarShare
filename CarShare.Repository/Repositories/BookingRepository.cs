@@ -1,6 +1,7 @@
 ﻿using CarShare.Repository.DTOs;
 using CarShare.Repository.Interfaces;
 using CarShare.Repository.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,26 @@ namespace CarShare.Repository.Repositories
             return Task.Run(() => _context.Bookings.ToList());
         }
 
+        public async Task<List<BookingPersonLidtReturnDTO?>> GetBookingsForSharedCars(int carID)
+        {
+            using(var context = _context)
+            {
+                var bookings = await _context.Bookings
+                    .Where(b => b.CarID == carID)
+                    .Select(b => new BookingPersonLidtReturnDTO
+                    {
+                        ID = b.ID,
+                        StartDate = b.StartDate,
+                        EndDate = b.EndDate,
+                        PersonFullName = b.Person!.FirstName + " " + b.Person.LastName
+                    })
+                    .ToListAsync();
+
+                return bookings!;
+            }
+        }
+
+            // await _context.PersonCars.Where(b => b.PersonID == personID).Select(b => b.Car!).ToListAsync();
         public async Task<BookingModel?> Update(BookingUpdateDTO booking)
         {
             BookingModel? dbBooking = await _context.Bookings.FindAsync(booking.ID);
@@ -71,5 +92,6 @@ namespace CarShare.Repository.Repositories
 
             return dbBooking;
         }
+
     }
 }
