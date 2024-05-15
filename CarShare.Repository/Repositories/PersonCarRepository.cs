@@ -55,6 +55,14 @@ namespace CarShare.Repository.Repositories
                 return personCarToDelete;
             }
 
+            // Find bookings associated with the PersonCar
+            var bookingsToDelete = await _context.Bookings
+                .Where(b => b.CarID == pcDTO.CarID && b.PersonID == pcDTO.PersonID)
+                .ToListAsync();
+
+            // Delete the associated bookings
+            _context.Bookings.RemoveRange(bookingsToDelete);
+
             _context.PersonCars.Remove(personCarToDelete);
 
             await _context.SaveChangesAsync();
