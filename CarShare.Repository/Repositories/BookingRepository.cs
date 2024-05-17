@@ -59,7 +59,27 @@ namespace CarShare.Repository.Repositories
             }
         }
 
-            // await _context.PersonCars.Where(b => b.PersonID == personID).Select(b => b.Car!).ToListAsync();
+
+        public async Task<List<PersonBookingsReturnDTO?>> GetBookingsForPerson(int personID)
+        {
+            using (var context = _context)
+            {
+                var bookings = await _context.Bookings
+                    .Where(b => b.PersonID == personID)
+                    .Select(b => new PersonBookingsReturnDTO
+                    {
+                        ID = b.ID,
+                        StartDate = b.StartDate,
+                        EndDate = b.EndDate,
+                        CarName = b.Car!.Name
+                    })
+                    .ToListAsync();
+
+                return bookings!;
+            }
+        }
+
+        // await _context.PersonCars.Where(b => b.PersonID == personID).Select(b => b.Car!).ToListAsync();
         public async Task<BookingModel?> Update(BookingUpdateDTO booking)
         {
             BookingModel? dbBooking = await _context.Bookings.FindAsync(booking.ID);

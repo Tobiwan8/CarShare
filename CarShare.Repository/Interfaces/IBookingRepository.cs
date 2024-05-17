@@ -13,6 +13,7 @@ namespace CarShare.Repository.Interfaces
         Task<BookingModel> Create(BookingDTO booking);
         Task<List<BookingModel>> GetAll();
         Task<List<BookingPersonLidtReturnDTO?>> GetBookingsForSharedCars(int carID);
+        Task<List<PersonBookingsReturnDTO?>> GetBookingsForPerson(int personID);
         Task<BookingModel?> Update(BookingUpdateDTO booking);
         Task<BookingModel?> Delete(int bookingID);
     }
