@@ -17,7 +17,7 @@ namespace CarShare.API.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -142,8 +142,7 @@ namespace CarShare.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CarID",
                 table: "Bookings",
-                column: "CarID",
-                unique: true);
+                column: "CarID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_PersonID",
@@ -180,7 +179,15 @@ namespace CarShare.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Persons_UserID",
                 table: "Persons",
-                column: "UserID");
+                column: "UserID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserName",
+                table: "Users",
+                column: "UserName",
+                unique: true,
+                filter: "[UserName] IS NOT NULL");
         }
 
         /// <inheritdoc />

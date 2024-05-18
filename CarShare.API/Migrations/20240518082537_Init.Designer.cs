@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShare.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240430071955_Init")]
+    [Migration("20240518082537_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -143,7 +143,8 @@ namespace CarShare.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("Persons");
                 });
@@ -163,9 +164,13 @@ namespace CarShare.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("UserName")
+                        .IsUnique()
+                        .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("Users");
                 });

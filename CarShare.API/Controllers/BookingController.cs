@@ -18,15 +18,39 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPost]
-        public async Task Create(BookingDTO booking)
+        public async Task<IActionResult> Create(BookingDTO booking)
         {
-            await _context.Create(booking);
+            try
+            {
+                var bookingModel = await _context.Create(booking);
+                return CreatedAtAction(nameof(GetById), new { id = bookingModel.ID }, bookingModel);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Log exception (ex) here if necessary
+                return StatusCode(500, new { message = ex });
+            }
         }
 
         [HttpGet]
         public async Task<List<BookingModel>> Get()
         {
             return await _context.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var booking = await _context.GetBookingByID(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+            return Ok(booking);
         }
 
         [HttpGet("carID/{carID}")]

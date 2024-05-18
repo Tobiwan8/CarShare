@@ -16,5 +16,6 @@ namespace CarShare.Repository.Interfaces
         Task<List<PersonBookingsReturnDTO?>> GetBookingsForPerson(int personID);
         Task<BookingModel?> Update(BookingUpdateDTO booking);
         Task<BookingModel?> Delete(int bookingID);
+        Task<BookingModel?> GetBookingByID(int id);
     }
 }

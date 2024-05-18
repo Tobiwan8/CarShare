@@ -20,9 +20,34 @@ namespace CarShare.Repository.Repositories
             _context = data;
         }
 
-        public Task<BookingModel> Create(BookingDTO booking)
+        public async Task<BookingModel> Create(BookingDTO booking)
         {
-            // context is our Database!!
+            booking.StartDate = booking.StartDate.Date;
+            booking.EndDate = booking.EndDate.Date.AddDays(1).AddTicks(-1);
+
+            bool carOverlap = await _context.Bookings
+                .AnyAsync(b => b.CarID == booking.CarID &&
+                       ((booking.StartDate >= b.StartDate && booking.StartDate < b.EndDate) ||
+                        (booking.EndDate > b.StartDate && booking.EndDate <= b.EndDate) ||
+                        (booking.StartDate < b.StartDate && booking.EndDate > b.EndDate)));
+
+            if (carOverlap)
+            {
+                throw new InvalidOperationException("The car is already booked for the specified time period.");
+            }
+
+            bool personOverlap = await _context.Bookings
+                .AnyAsync(b => b.PersonID == booking.PersonID &&
+                               ((booking.StartDate >= b.StartDate && booking.StartDate < b.EndDate) ||
+                                (booking.EndDate > b.StartDate && booking.EndDate <= b.EndDate) ||
+                                (booking.StartDate < b.StartDate && booking.EndDate > b.EndDate)));
+
+            if (personOverlap)
+            {
+                throw new InvalidOperationException("The person already has a booking for the specified time period.");
+            }
+
+
             BookingModel model = new()
             {
                 StartDate = booking.StartDate,
@@ -32,12 +57,17 @@ namespace CarShare.Repository.Repositories
             };
             _context.Bookings.Add(model);
             _context.SaveChanges();
-            return Task.Run(() => model);
+            return model;
         }
 
         public Task<List<BookingModel>> GetAll()
         {
             return Task.Run(() => _context.Bookings.ToList());
+        }
+
+        public async Task<BookingModel?> GetBookingByID(int ID) 
+        {
+            return await _context.Bookings.FirstOrDefaultAsync(b => b.ID == ID);
         }
 
         public async Task<List<BookingPersonLidtReturnDTO?>> GetBookingsForSharedCars(int carID)
