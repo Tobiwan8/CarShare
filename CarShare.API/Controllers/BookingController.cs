@@ -66,9 +66,27 @@ namespace CarShare.API.Controllers
         }
 
         [HttpPut]
-        public async Task Update(BookingUpdateDTO booking)
+        public async Task<IActionResult> Update(BookingUpdateDTO booking)
         {
-            await _context.Update(booking);
+            try
+            {
+                var updatedBooking = await _context.Update(booking);
+
+                if (updatedBooking == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedBooking);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex });
+            }
         }
 
         [HttpDelete]

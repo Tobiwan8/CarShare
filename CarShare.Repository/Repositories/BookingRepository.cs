@@ -119,12 +119,49 @@ namespace CarShare.Repository.Repositories
                 return dbBooking;
             }
 
-            dbBooking.StartDate = booking.StartDate;
-            dbBooking.EndDate = booking.EndDate;
+            dbBooking.StartDate = booking.StartDate.Date;
+            dbBooking.EndDate = booking.EndDate.Date.AddDays(1).AddTicks(-1);
+
+            bool carOverlap = await _context.Bookings
+                .AnyAsync(b => b.CarID == dbBooking.CarID &&
+                       b.ID != dbBooking.ID &&
+                       ((dbBooking.StartDate >= b.StartDate && dbBooking.StartDate < b.EndDate) ||
+                        (dbBooking.EndDate > b.StartDate && dbBooking.EndDate <= b.EndDate) ||
+                        (dbBooking.StartDate < b.StartDate && dbBooking.EndDate > b.EndDate)));
+
+            if (carOverlap)
+            {
+                throw new InvalidOperationException("The car is already booked for the specified time period.");
+            }
+
+            bool personOverlap = await _context.Bookings
+                .AnyAsync(b => b.PersonID == dbBooking.PersonID &&
+                       b.ID != dbBooking.ID &&
+                       ((dbBooking.StartDate >= b.StartDate && dbBooking.StartDate < b.EndDate) ||
+                        (dbBooking.EndDate > b.StartDate && dbBooking.EndDate <= b.EndDate) ||
+                        (dbBooking.StartDate < b.StartDate && dbBooking.EndDate > b.EndDate)));
+
+            if (personOverlap)
+            {
+                throw new InvalidOperationException("The person already has a booking for the specified time period.");
+            }
 
             await _context.SaveChangesAsync();
 
             return dbBooking;
+            //BookingModel? dbBooking = await _context.Bookings.FindAsync(booking.ID);
+
+            //if (dbBooking == null)
+            //{
+            //    return dbBooking;
+            //}
+
+            //dbBooking.StartDate = booking.StartDate;
+            //dbBooking.EndDate = booking.EndDate;
+
+            //await _context.SaveChangesAsync();
+
+            //return dbBooking;
         }
 
         public async Task<BookingModel?> Delete(int bookingID)
